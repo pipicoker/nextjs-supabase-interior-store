@@ -62,6 +62,8 @@ const Header = () => {
       setUser(data?.user);
     };
     getUser();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, []);
 
 
@@ -72,7 +74,7 @@ const Header = () => {
       return []
     }
 
-    let { data: cart, error } = await supabase
+    const { data: cart, error } = await supabase
     .from('cart')
     .select('*')
     .eq('user_id', user.id)
@@ -88,6 +90,8 @@ const Header = () => {
 
   useEffect(() => {
     fetchUserCart();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [user]);
 
   // Use real-time subscription to update cart count when items are added or removed

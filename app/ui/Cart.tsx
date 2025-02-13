@@ -42,10 +42,16 @@ const UserCart = () => {
 
   useEffect(() => {
     fetchUserCart();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, []);
 
   // delete a particular product from cart
   const deleteProductFromCart = async(product_id: number) => {
+    if(!user){
+      return []
+    }
+
     
     const item = cartItems.find((item) => item.product_id === product_id);
     if (!item) return;
@@ -67,6 +73,7 @@ const UserCart = () => {
 
   // increase the quantity of a product in cart
   const increaseProductQuantity = async(product_id: number) => {
+    if (!user) return;
     const item = cartItems.find((item) => item.product_id === product_id);
     if (!item) return;
 
@@ -91,6 +98,7 @@ const UserCart = () => {
 
   // reduce the quantity of a product in cart
   const reduceProductQuantity = async(product_id: number) => {
+    if (!user) return;
     const item = cartItems.find((item) => item.product_id === product_id);
     if (!item) return;
 

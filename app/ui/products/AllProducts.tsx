@@ -6,6 +6,7 @@ import {motion} from 'motion/react'
 import {useProductStore} from "../../store/productStore";
 import {useAuthStore} from "../../store/authStore";
 import { supabase } from "@/app/lib/supabaseClient";
+import Image from "next/image";
 
 interface productsInterface {
   id: number
@@ -30,9 +31,9 @@ const AllProducts = ({products}: {products: productsInterface[]}) => {
 
   useEffect(() => {
     setProducts(products);
-    // console.log(productsToShow)
-    // console.log(productBtn);
     
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [products]);
 
   // add items to cart
@@ -105,7 +106,7 @@ const AllProducts = ({products}: {products: productsInterface[]}) => {
               <div key={data.id}
                 >
                   <div  className=" h-full border bg-gray-50 overflow-hidden rounded-3xl transform transition duration-500 hover:scale-110">
-                            <img src={data.pix} alt="pix" className='w-full h-[230px]' />
+                            <Image src={data.pix} alt="pix" className='w-full h-[230px]' height={230} width={230} />
                     <div className='mt-2 space-y-3 px-4 text-left'>
     
                       <div className=''>

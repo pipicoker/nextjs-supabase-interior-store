@@ -1,5 +1,3 @@
-import type { AppProps } from "next/app";
-import AuthGuard from "./ui/AuthGuard";
 
 import BestSellingWrapper from "./ui/home/BestSellingWrapper";
 import TrendingWrapper from "./ui/home/TrendingWrapper";

@@ -16,7 +16,7 @@ const HeroWrapper = async() => {
     return <div>Error loading products</div>
   }
 
-  if (!hero) return <div>No products found</div>
+  if (!hero) return <div className="text-red-600">No products found</div>
   return (
     <div>
         <Hero hero={hero}/>

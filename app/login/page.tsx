@@ -16,8 +16,12 @@ const LoginPage = () => {
     try {
       await signIn(email, password);
       router.push("/");
-    } catch (error: any) {
-      alert(error.message);
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(error.message);
+      } else{
+        alert("Error logging in");
+      }
     }
   };
   

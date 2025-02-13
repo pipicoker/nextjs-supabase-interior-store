@@ -1,6 +1,4 @@
 'use client'
-
-import HeroData from '../../Data/HeroData'
 import {  motion } from "motion/react";
 
 interface HeroInterface {
@@ -13,7 +11,6 @@ interface HeroInterface {
 
 
 const Hero = ({hero}: {hero: HeroInterface[]}) => {
-    
 
   return (
       <motion.main
@@ -33,7 +30,7 @@ const Hero = ({hero}: {hero: HeroInterface[]}) => {
           </section>
 
           <section className='flex justify-center space-x-4 -mt-8'>
-              {HeroData.map((data) =>
+              {hero.map((data) =>
                   <div  key={data.id} className="w-[280px] md:w-[315px] h-[184px] flex flex-col justify-center items-center text-center rounded-2xl  bg-white border border-graay font-semibold space-y-3">
                       <h2 className='text-4xl md:text-6xl  text-pry'>{data.figure}</h2>
                       <div className='text-xl md:text-2xl '>
