@@ -1,6 +1,5 @@
 'use client'
-import Image from 'next/image';
-import logo from '../../public/Images/logo.png'
+
 import CheckoutPage from '../ui/CheckoutPage';
 import convertToSubcurrency from '../lib/convertToSubcurrency';
 import {Elements} from '@stripe/react-stripe-js';
