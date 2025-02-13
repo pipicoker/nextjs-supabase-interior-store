@@ -9,7 +9,7 @@ import ClientsReviewWrapper from "./ui/home/ClientsReviewWrapper";
 export default function Home() {
   
   return (
-    <div>
+    <div className="bg-[#F9DDB1">
       <HeroWrapper />
       <BenefitsWrapper />
       <BestSellingWrapper />
