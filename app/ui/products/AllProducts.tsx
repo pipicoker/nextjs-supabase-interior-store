@@ -32,7 +32,6 @@ const AllProducts = ({products}: {products: productsInterface[]}) => {
   useEffect(() => {
     setProducts(products);
     
-      // eslint-disable-next-line react-hooks/exhaustive-deps
 
   }, [products]);
 

@@ -9,10 +9,6 @@ import { useCartStore } from '../store/cartStore';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { FaLongArrowAltRight } from 'react-icons/fa';
 
-
-
-
-
 const UserCart = () => {
   const [cartItems, setCartItems] = useState<any[]>([])
   const {user} = useAuthStore()
@@ -26,7 +22,7 @@ const UserCart = () => {
       return []
     }
 
-    let { data: cart, error } = await supabase
+    const { data: cart, error } = await supabase
     .from('cart')
     .select('*')
     .eq('user_id', user.id)
@@ -42,7 +38,6 @@ const UserCart = () => {
 
   useEffect(() => {
     fetchUserCart();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
 
   }, []);
 

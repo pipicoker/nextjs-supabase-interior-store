@@ -62,7 +62,6 @@ const Header = () => {
       setUser(data?.user);
     };
     getUser();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
 
   }, []);
 
@@ -90,7 +89,6 @@ const Header = () => {
 
   useEffect(() => {
     fetchUserCart();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
 
   }, [user]);
 
