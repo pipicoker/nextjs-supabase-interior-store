@@ -35,6 +35,9 @@ const CheckoutPage = ({totalCartPrice}: {totalCartPrice: number}) => {
       const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setLoading(true);
+        if(!user){
+          return []
+        }
 
         if (!stripe || !elements) {
             return
