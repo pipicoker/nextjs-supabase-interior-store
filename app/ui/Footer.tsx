@@ -44,8 +44,8 @@ const Footer = () => {
           </form>
             </div> 
             
-            <div className='mt-4 pt-5 pb-8'>
-                <p className='text-sm text-white'> 2022 MeekDeco. All rights Reserved</p>
+            <div className='mt-4 pt-5 pb-8 flex justify-center items-center'>
+                <p className='text-sm text-white '> 2022 MeekDeco. All rights Reserved</p>
             </div>
       </footer>
     

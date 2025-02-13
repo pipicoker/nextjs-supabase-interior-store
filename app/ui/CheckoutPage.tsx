@@ -83,7 +83,7 @@ const CheckoutPage = ({totalCartPrice}: {totalCartPrice: number}) => {
         {errorMessage && <p>{errorMessage}</p>}
             <button
              disabled={!stripe || loading}
-            className="text-white w-full p-5 bg-black mt-2 rounded-md font-bold disabled:opacity-50 disabled:animate-pulse">
+            className="text-white w-full p-5 bg-[#DC6601] mt-2 rounded-md font-bold disabled:opacity-50 disabled:animate-pulse">
                 {!loading ? `Pay $${totalCartPrice}` : "Processing..."}
                 </button>
        </form>
