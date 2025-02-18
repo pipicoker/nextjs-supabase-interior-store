@@ -55,7 +55,7 @@ const CheckoutPage = ({totalCartPrice}: {totalCartPrice: number}) => {
             elements, 
             clientSecret,
             confirmParams: {
-                return_url: `http://www.localhost:3000/payment-success`,
+                return_url: `https://next-sb-interior-store.vercel.app/payment-success`,
             }
         })
 
