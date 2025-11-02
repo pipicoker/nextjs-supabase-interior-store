@@ -42,37 +42,37 @@ const ClientsReview = ({review}: {review: ReviewInterface[]}) => {
   }, [swiperInstance])
 
   return (
-    <motion.div className='mt-32 px-[60px] font-semibold'
+    <motion.div className='mt-32 px-[60px] font-semibold bg-gradient-to-b from-white via-orange-50/20 to-white py-20'
     initial={{ opacity: 0, y: 50 }} 
     whileInView={{ opacity: 1, y: 0 }}  
     transition={{ duration: 0.5,  delay: 0}}  viewport={{ once: true }}
     >
      
-     <div className='  flex justify-between items-center'>
+     <div className='flex flex-col md:flex-row justify-between items-start md:items-center gap-4'>
             <div>
-                <div className='flex items-center space-x-3 text-2xl md:text-3xl  text-pry'>
+                <div className='flex items-center space-x-3 text-2xl md:text-3xl text-pry'>
                 <Image src={Line} alt="" />
                 <p>Clients Review</p>
                 </div>
             
-                <h3 className='mt-2 text-3xl md:text-5xl text-left'>What Our Clients Say</h3>   
+                <h3 className='mt-2 text-3xl md:text-5xl text-left font-bold'>What Our Clients Say</h3>   
             </div>
             
-            <div className='hidden md:flex items-center space-x-4' >
+            <div className='hidden md:flex items-center space-x-4'>
               <button 
             ref={prevRef} aria-label="Previous review"
             disabled={isBeginning}
-            className={`p-2 rounded-full ${isBeginning ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100'}`}
+            className={`p-3 rounded-full bg-white border-2 border-gray-200 shadow-md transition-all duration-300 ${isBeginning ? 'opacity-50 cursor-not-allowed' : 'hover:bg-pry hover:text-white hover:border-pry hover:shadow-lg'}`}
           >
-            <FaArrowLeftLong size={40}/>
+            <FaArrowLeftLong size={24}/>
           </button>
                 
           <button 
             ref={nextRef} aria-label="Next review"
             disabled={isEnd}
-            className={`p-2 rounded-full    ${isEnd ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100'}`}
+            className={`p-3 rounded-full bg-white border-2 border-gray-200 shadow-md transition-all duration-300 ${isEnd ? 'opacity-50 cursor-not-allowed' : 'hover:bg-pry hover:text-white hover:border-pry hover:shadow-lg'}`}
           >
-            <FaArrowRightLong size={40}/>
+            <FaArrowRightLong size={24}/>
           </button>
 
                 
@@ -117,24 +117,42 @@ const ClientsReview = ({review}: {review: ReviewInterface[]}) => {
             {
             review.map((data) => (
               <SwiperSlide key={data.id}>
-                <div className='mt-16 lg:ml-[256px] md:ml-12 grid lg:grid-cols-3 '>
-              <div className='w-[202px] h-[510px] bg-pry flex items-center justify-center justify-self-center lg:justify-self-start rounded-[32px]'>
-                  <Image src={data.image} className="absolute w-[352px] h-[400px] md:w-[427px] md:h-[440px] shrink-0" alt="alternative" width={427} height={440}/>
-
-                
-              </div>
-              
-
-              <div className='lg:col-span-2 lg:pl-16 pt-4 md:pt-0 lg:px-16 flex flex-col justify-center items-center'>
-                  <div>
-                      <Image src={up} className="flex align-left" alt="" />
-                      <p className='mt-8 mb-6 text-left text-xl text-blac2 opacity-60 font-normal'>{data.review}</p>
-                      <div className=' flex  justify-end'>
-                        <Image src={down} alt="" className='' />
+                <div className='mt-16 max-w-6xl mx-auto px-4'>
+                  <div className='grid lg:grid-cols-5 gap-8 lg:gap-12 items-center'>
+                    {/* Orange Card - Made Wider */}
+                    <div className='lg:col-span-2 flex justify-center lg:justify-start'>
+                      <div className='w-[320px] md:w-[380px] h-[480px] md:h-[520px] bg-gradient-to-br from-pry via-orange-500 to-orange-600 flex items-center justify-center rounded-[32px] shadow-2xl relative overflow-hidden transform hover:scale-105 transition-transform duration-500'>
+                        <div className='absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-white/10'></div>
+                        <div className='absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.2),transparent)]'></div>
+                        <Image src={data.image} className="relative w-[380px] h-[420px] md:w-[440px] md:h-[460px] object-cover rounded-[24px] shadow-xl" alt="Client testimonial" width={440} height={460}/>
                       </div>
+                    </div>
+              
+                    {/* Review Card */}
+                    <div className='lg:col-span-3 flex flex-col justify-center'>
+                      <div className='bg-white p-8 md:p-12 rounded-3xl shadow-xl border border-gray-100 hover:shadow-2xl transition-shadow duration-300'>
+                        <div className='flex items-start'>
+                          <Image src={up} className="w-10 h-10 md:w-14 md:h-14 opacity-40" alt="Quote start" />
+                        </div>
+                        <p className='mt-6 mb-8 text-left text-lg md:text-xl text-gray-700 font-normal leading-relaxed'>&quot;{data.review}&quot;</p>
+                        <div className='flex justify-end'>
+                          <Image src={down} alt="Quote end" className='w-10 h-10 md:w-14 md:h-14 opacity-40' />
+                        </div>
+                        <div className='mt-6 pt-6 border-t border-gray-200'>
+                          <div className='flex items-center gap-2'>
+                            <div className='flex gap-1'>
+                              {[...Array(5)].map((_, i) => (
+                                <svg key={i} className='w-5 h-5 text-yellow-400 fill-current' viewBox='0 0 20 20'>
+                                  <path d='M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z' />
+                                </svg>
+                              ))}
+                            </div>
+                            <span className='text-sm text-gray-500 ml-2'>5.0 Rating</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  
-              </div>
                 </div>
               </SwiperSlide>
             ))

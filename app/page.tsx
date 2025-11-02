@@ -10,7 +10,7 @@ import WelcomeBanner from "./ui/home/WelcomeBanner";
 export default function Home() {
   
   return (
-    <div className="bg-[#F9DDB1]">
+    <div className="bg-white">
       <WelcomeBanner />
       <HeroWrapper />
       <BenefitsWrapper />
