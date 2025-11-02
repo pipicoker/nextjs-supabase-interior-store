@@ -7,11 +7,11 @@ import whyfurniture from '../../../public/Images/whyfurniture.jpg'
 import { FaShoppingCart, FaDollarSign, FaShippingFast, FaComments } from 'react-icons/fa'
 
 
-const iconMap: { [key: number]: React.ReactElement } = {
-  1: <FaShoppingCart className="w-6 h-6" />,
-  2: <FaDollarSign className="w-6 h-6" />,
-  3: <FaShippingFast className="w-6 h-6" />,
-  4: <FaComments className="w-6 h-6" />
+const iconMap: { [key: string]: React.ReactElement } = {
+  "1": <FaShoppingCart className="w-6 h-6" />,
+  "2": <FaDollarSign className="w-6 h-6" />,
+  "3": <FaShippingFast className="w-6 h-6" />,
+  "4": <FaComments className="w-6 h-6" />
 }
 
 const WhyAbout = () => {
