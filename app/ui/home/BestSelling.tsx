@@ -39,7 +39,7 @@ const BestSelling = ({bestselling}: {bestselling: Product[]}) => {
                 <h3 className='mt-2 text-3xl md:text-5xl text-left font-bold'>Our Best Selling Products</h3>   
             </div>
             
-            <Link href="./productpage" className='flex items-center space-x-2 text-pry hover:text-orange-600 transition-colors group' >
+            <Link href="/products" className='flex items-center space-x-2 text-pry hover:text-orange-600 transition-colors group' >
                 <p className='text-lg'>Explore All</p>
                 <Image src={Arrow} alt="arrow" width={20} height={20} className='group-hover:translate-x-1 transition-transform' />
             </Link>
