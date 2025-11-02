@@ -19,7 +19,7 @@ const Benefits = ({benefits}: {benefits: Benefit[]}) => {
     initial={{ opacity: 0, y: 50 }} 
     whileInView={{ opacity: 1, y: 0 }} 
     transition={{ duration: 0.5,  }} viewport={{ once: true }}
-      className='mt-32 px-[52px] md:px-[60px] font-semibold bg-gradient-to-b from-white via-orange-50/30 to-white py-20'>
+      className='mt-32 px-[52px] md:px-[60px] font-semibold bg-gradient-to-b from-[#F5F5F5] via-orange-50/30 to-[#F5F5F5] py-20'>
           <div className='flex items-center space-x-3 text-2xl md:text-3xl text-pry'>
               <Image src={Line} alt="line" width={100} height={100} />
               <p>Why choose us?</p>

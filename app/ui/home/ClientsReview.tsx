@@ -42,7 +42,7 @@ const ClientsReview = ({review}: {review: ReviewInterface[]}) => {
   }, [swiperInstance])
 
   return (
-    <motion.div className='mt-32 px-[60px] font-semibold bg-gradient-to-b from-white via-orange-50/20 to-white py-20'
+    <motion.div className='mt-32 px-[60px] font-semibold bg-gradient-to-b from-[#F5F5F5] via-orange-50/20 to-[#F5F5F5] py-20'
     initial={{ opacity: 0, y: 50 }} 
     whileInView={{ opacity: 1, y: 0 }}  
     transition={{ duration: 0.5,  delay: 0}}  viewport={{ once: true }}

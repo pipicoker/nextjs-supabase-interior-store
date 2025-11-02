@@ -52,7 +52,7 @@ const BestSelling = ({bestselling}: {bestselling: Product[]}) => {
                         <div className='overflow-hidden h-[275px]'>
                           <Image src={data.image} alt="pix" className='w-full h-[275px] object-cover group-hover:scale-110 transition-transform duration-500' width={281} height={275}/>
                         </div>
-                        <div className='mt-4 space-y-3 grid justify-center text-center px-4 pb-4'>
+                        <div className='mt-4 space-y-3 grid justify-center text-center px-4 pb-8'>
                             <p className='text-sm text-gray-500 uppercase tracking-wide'>{data.design}</p>
                             <p className='text-lg font-bold text-gray-800'>{data.type}</p>
                             <p className='text-2xl text-pry font-bold'>${data.price.toLocaleString()}</p>

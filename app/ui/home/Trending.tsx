@@ -45,7 +45,7 @@ const Trending = ({trending}: {trending: Product[]}) => {
           
           <div className='mt-16 grid md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-6 justify-items-center'>
               {trending?.map((data) => 
-                  <div key={data.id} className="h-[415px] pt-[18px] px-4 bg-white border border-gray-200 rounded-2xl shadow-lg hover:shadow-2xl transform transition-all duration-500 hover:scale-105 hover:-translate-y-2 grid justify-center overflow-hidden group">
+                  <div key={data.id} className="h-[415px] pt-[18px] px-4 pb-8 bg-white border border-gray-200 rounded-2xl shadow-lg hover:shadow-2xl transform transition-all duration-500 hover:scale-105 hover:-translate-y-2 grid justify-center overflow-hidden group">
                       <div className='overflow-hidden rounded-xl'>
                         <Image src={data.image} alt="alternate for picture" width={281} height={275} className='group-hover:scale-110 transition-transform duration-500'/>
                       </div>
