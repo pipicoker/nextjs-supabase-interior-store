@@ -119,7 +119,7 @@ const ContactUs = () => {
         <div className='bg-white rounded-3xl shadow-xl p-8 md:p-12 border border-gray-100'>
           <div className='text-center mb-8'>
             <h3 className='text-3xl md:text-4xl font-bold text-blac2 mb-3'>Send Us a Message</h3>
-            <p className='text-gray-600 text-lg'>Have a question? We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
+            <p className='text-gray-600 text-lg'>Have a question? We&apos;d love to hear from you. Send us a message and we&apos;ll respond as soon as possible.</p>
           </div>
 
           <form onSubmit={handleSubmit} className='space-y-6'>
