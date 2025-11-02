@@ -121,10 +121,29 @@ const ClientsReview = ({review}: {review: ReviewInterface[]}) => {
                   <div className='grid lg:grid-cols-5 gap-8 lg:gap-12 items-center'>
                     {/* Orange Card - Made Wider */}
                     <div className='lg:col-span-2 flex justify-center lg:justify-start'>
-                      <div className='w-[320px] md:w-[380px] h-[480px] md:h-[520px] bg-gradient-to-br from-pry via-orange-500 to-orange-600 flex items-center justify-center rounded-[32px] shadow-2xl relative overflow-hidden transform hover:scale-105 transition-transform duration-500'>
-                        <div className='absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-white/10'></div>
-                        <div className='absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.2),transparent)]'></div>
-                        <Image src={data.image} className="relative w-[380px] h-[420px] md:w-[440px] md:h-[460px] object-cover rounded-[24px] shadow-xl" alt="Client testimonial" width={440} height={460}/>
+                      <div className='w-[320px] md:w-[380px] h-[480px] md:h-[520px] bg-gradient-to-br from-pry via-orange-500 to-orange-600 flex items-center justify-center rounded-[32px] shadow-2xl relative overflow-visible transform hover:scale-105 transition-transform duration-500 p-6'>
+                        {/* Decorative gradient overlays */}
+                        <div className='absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-white/10 rounded-[32px]'></div>
+                        <div className='absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.15),transparent)] rounded-[32px]'></div>
+                        
+                        {/* Decorative corner accents */}
+                        <div className='absolute top-4 left-4 w-12 h-12 border-t-4 border-l-4 border-white/30 rounded-tl-2xl'></div>
+                        <div className='absolute bottom-4 right-4 w-12 h-12 border-b-4 border-r-4 border-white/30 rounded-br-2xl'></div>
+                        
+                        {/* Image container with enhanced styling */}
+                        <div className='relative w-full h-full flex items-center justify-center'>
+                          <div className='relative w-[280px] h-[380px] md:w-[320px] md:h-[420px] rounded-[20px] overflow-hidden shadow-2xl border-4 border-white/20 group-hover:border-white/40 transition-all duration-500'>
+                            <Image 
+                              src={data.image} 
+                              className="w-full h-full object-cover object-center hover:scale-105 transition-transform duration-700" 
+                              alt="Client testimonial" 
+                              width={440} 
+                              height={460}
+                            />
+                            {/* Subtle overlay on image */}
+                            <div className='absolute inset-0 bg-gradient-to-t from-black/10 to-transparent'></div>
+                          </div>
+                        </div>
                       </div>
                     </div>
               
