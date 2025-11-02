@@ -5,6 +5,8 @@ import { supabase } from '../lib/supabaseClient';
 
 import { useAuthStore } from '../store/authStore';
 import { useCartStore } from '../store/cartStore';
+import { useToastStore } from '../store/toastStore';
+import { cartEvents } from '../lib/cartEvents';
 
 import { AiOutlineDelete } from 'react-icons/ai';
 import { FaLongArrowAltRight } from 'react-icons/fa';
@@ -14,6 +16,7 @@ const UserCart = () => {
   const {user} = useAuthStore()
 
   const { setTotalCartPrice} = useCartStore()
+  const { addToast } = useToastStore()
 
 
   // fetch cart items from supabase
@@ -60,9 +63,12 @@ const UserCart = () => {
 
     if (error) {
       console.error("Error deleting product from cart:", error.message);
+      addToast("Failed to remove item from cart", "error");
     }  else {      
-      alert("Product deleted from cart successfully");
+      addToast("Product removed from cart", "success");
       setCartItems(cartItems.filter((item) => item.product_id !== product_id));
+      // Notify header to update cart count
+      cartEvents.emit();
     }
   }
 
@@ -88,6 +94,8 @@ const UserCart = () => {
           cartItem.product_id === product_id ? { ...cartItem, quantity: newQuantity } : cartItem
         )
       );
+      // Notify header to update cart count (if needed)
+      cartEvents.emit();
     }
   }
 
@@ -118,6 +126,8 @@ const UserCart = () => {
             cartItem.product_id === product_id ? { ...cartItem, quantity: newQuantity } : cartItem
           )
         );
+        // Notify header to update cart count (if needed)
+        cartEvents.emit();
       }
     }
    

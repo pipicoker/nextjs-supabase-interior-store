@@ -14,13 +14,14 @@ import { RxHamburgerMenu } from 'react-icons/rx';
 
 import { useAuthStore } from "../store/authStore";
 import { supabase } from "../lib/supabaseClient";
+import { cartEvents } from "../lib/cartEvents";
 
 const Header = () => {
   const pathname = usePathname()
 
   const [activeNav, setActiveNav] = useState("one")
   const [mobileNav, setMobileNav] = useState(false)
-  const { user, setUser, logout } = useAuthStore();
+  const { user, logout } = useAuthStore();
 
 
 
@@ -55,15 +56,7 @@ const Header = () => {
     setMobileNav(!mobileNav)
   }
 
-  // Check for existing session on mount
-  useEffect(() => {
-    const getUser = async () => {
-      const { data } = await supabase.auth.getUser();
-      setUser(data?.user);
-    };
-    getUser();
-
-  }, []);
+  // Note: User state is managed by authStore, no need to fetch here
 
 
    // fetch cart items from supabase
@@ -88,39 +81,72 @@ const Header = () => {
   }
 
   useEffect(() => {
-    fetchUserCart();
+    if (user) {
+      fetchUserCart();
+    }
+  }, [user]);
 
+  // Listen to manual cart update events
+  useEffect(() => {
+    const unsubscribe = cartEvents.subscribe(() => {
+      if (user) {
+        fetchUserCart();
+      }
+    });
+
+    return unsubscribe;
   }, [user]);
 
   // Use real-time subscription to update cart count when items are added or removed
-  // useEffect(() => {
-  //   if (!user) return;
+  useEffect(() => {
+    if (!user) {
+      setItemNumber(0);
+      return;
+    }
   
-  //   fetchUserCart(); // ✅ Initial fetch
+    // Initial fetch
+    const loadCart = async () => {
+      await fetchUserCart();
+    };
+    loadCart();
   
-  //   const subscription = supabase
-  //     .channel("cart_changes")
-  //     .on(
-  //       "postgres_changes",
-  //       { event: "*", schema: "public", table: "cart" }, // ✅ Remove filter (Supabase does not support it)
-  //       (payload) => {
-  //         console.log("Cart updated:", payload);
+    // Set up real-time subscription
+    const channel = supabase
+      .channel(`cart_changes_${user.id}`)
+      .on(
+        "postgres_changes",
+        { 
+          event: "*", 
+          schema: "public", 
+          table: "cart"
+        },
+        async (payload) => {
+          console.log("Cart change detected:", payload.eventType, payload);
   
-  //         // ✅ Manually filter by user_id
-  //         const newItem = payload.new as { user_id?: string };
-  //       const oldItem = payload.old as { user_id?: string };
+          // Check if this change is for the current user
+          const newItem = payload.new as { user_id?: string };
+          const oldItem = payload.old as { user_id?: string };
 
-  //         if (newItem?.user_id === user.id || oldItem?.user_id === user.id) {
-  //           fetchUserCart(); // ✅ Re-fetch the cart when this user's data is updated
-  //         }
-  //       }
-  //     )
-  //     .subscribe();
+          const isCurrentUser = newItem?.user_id === user.id || oldItem?.user_id === user.id;
+          
+          if (isCurrentUser) {
+            console.log("Updating cart count for current user...");
+            // Add a small delay to ensure DB is fully updated
+            setTimeout(async () => {
+              await fetchUserCart();
+            }, 100);
+          }
+        }
+      )
+      .subscribe((status) => {
+        console.log("Subscription status:", status);
+      });
   
-  //   return () => {
-  //     supabase.removeChannel(subscription); // ✅ Cleanup subscription on unmount
-  //   };
-  // }, [user]); // ✅ Re-run when `user` changes
+    return () => {
+      console.log("Cleaning up cart subscription");
+      supabase.removeChannel(channel);
+    };
+  }, [user?.id]);
   
 
   return (
@@ -161,7 +187,9 @@ const Header = () => {
             ) : (
               <div className='hidden md:flex items-center space-x-6 text-blac'>
 
-               
+              <Link href="../products" className="text-gray-700 hover:text-pry transition-colors font-medium">
+                Shop
+              </Link>
 
               <Link href="../cart" className="relative">
                 <RiShoppingCartLine className="h-7 w-7 " />
@@ -175,37 +203,50 @@ const Header = () => {
               </Link>
               
 
-              {/* <button onClick={logout}>Logout</button> */}
-
               {/* User Icon (Click to Toggle) */}
-              <div className="relative" ref={dropdownRef} 
-                // onMouseEnter={() => setIsOpen(true)} 
-                // onMouseLeave={() => setIsOpen(false)}
-                >
+              <div className="relative" ref={dropdownRef}>
                   <button 
                   onClick={() => setIsOpen(!isOpen)}
+                  className="hover:opacity-80 transition-opacity"
                   >
-                    {/* <BiUser className="w-[32px] h-[32px] cursor-pointer" />
-                     */}
-                     <p className='text-lg border-2 bg-[#D0D0D0] w-10 h-10 rounded-full flex items-center justify-center'>{user?.email?.charAt(0).toUpperCase()}</p>
+                     <p className='text-lg border-2 bg-[#D0D0D0] w-10 h-10 rounded-full flex items-center justify-center hover:bg-pry hover:text-white hover:border-pry transition-colors'>{user?.email?.charAt(0).toUpperCase()}</p>
                   </button>
 
                   {/* Dropdown Menu */}
                   {isOpen && (
-                    <div
-                  //   onMouseEnter={() => setIsOpen(true)} 
-                  // onMouseLeave={() => setIsOpen(false)}
-                     className="absolute right-0 mt-2  bg-white shadow-lg rounded-lg py-2 border border-gray-200 z-50">
-                      <p className="px-4 py-2 text-gray-700">{user.email}</p>
-                      <button
-                        onClick={() => {
-                          logout()
-                          setIsOpen(false)
-                        }}
-                        className="w-full text-left px-4 py-2 text-red-500 hover:bg-gray-100"
+                    <div className="absolute right-0 mt-2 bg-white shadow-lg rounded-lg py-2 border border-gray-200 z-50 min-w-[200px]">
+                      <div className="px-4 py-2 border-b border-gray-200">
+                        <p className="text-sm text-gray-500">Signed in as</p>
+                        <p className="text-gray-700 font-medium truncate">{user.email}</p>
+                      </div>
+                      
+                      <Link
+                        href="/account"
+                        onClick={() => setIsOpen(false)}
+                        className="block px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors"
                       >
-                        Logout
-                      </button>
+                        My Account
+                      </Link>
+                      
+                      <Link
+                        href="/cart"
+                        onClick={() => setIsOpen(false)}
+                        className="block px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors"
+                      >
+                        My Cart
+                      </Link>
+                      
+                      <div className="border-t border-gray-200 mt-1 pt-1">
+                        <button
+                          onClick={() => {
+                            logout()
+                            setIsOpen(false)
+                          }}
+                          className="w-full text-left px-4 py-2 text-red-500 hover:bg-red-50 transition-colors"
+                        >
+                          Logout
+                        </button>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -264,9 +305,25 @@ const Header = () => {
                   onClick={() => setMobileNav(false)}>Sign Up</Link>
                 </div>
                 )  : (
-                  
-                  <button className='border ml-8 mt-4 bg-pry px-4 py-2 rounded-lg text-white text-center' onClick={logout}>Log out</button>
-
+                  <div className='pt-4 grid gap-4 mx-4'>
+                    <Link 
+                      href="../account" 
+                      className='border border-pry px-4 py-2 rounded-lg text-pry text-center font-medium'
+                      onClick={() => setMobileNav(false)}
+                    >
+                      My Account
+                    </Link>
+                    
+                    <button 
+                      className='border bg-red-500 px-4 py-2 rounded-lg text-white text-center' 
+                      onClick={() => {
+                        logout();
+                        setMobileNav(false);
+                      }}
+                    >
+                      Log out
+                    </button>
+                  </div>
                 )}
               </div>
 

@@ -4,12 +4,14 @@ import TrendingWrapper from "./ui/home/TrendingWrapper";
 import BenefitsWrapper from "./ui/home/BenefitsWrapper";
 import HeroWrapper from "./ui/home/HeroWrapper";
 import ClientsReviewWrapper from "./ui/home/ClientsReviewWrapper";
+import WelcomeBanner from "./ui/home/WelcomeBanner";
 
 
 export default function Home() {
   
   return (
-    <div className="bg-[#F9DDB1">
+    <div className="bg-[#F9DDB1]">
+      <WelcomeBanner />
       <HeroWrapper />
       <BenefitsWrapper />
       <BestSellingWrapper />

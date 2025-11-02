@@ -1,11 +1,13 @@
 'use client'
 import { useRouter } from "next/navigation";
 
-import {  useEffect } from 'react'
+import {  useEffect, useState } from 'react'
 import {motion} from 'motion/react'
 import {useProductStore} from "../../store/productStore";
 import {useAuthStore} from "../../store/authStore";
+import { useToastStore } from "../../store/toastStore";
 import { supabase } from "@/app/lib/supabaseClient";
+import { cartEvents } from "../../lib/cartEvents";
 import Image from "next/image";
 
 interface productsInterface {
@@ -28,6 +30,8 @@ const AllProducts = ({products}: {products: productsInterface[]}) => {
 
   const {user} = useAuthStore();
   const {setProducts, productsToShow} = useProductStore();
+  const { addToast } = useToastStore();
+  const [addingToCart, setAddingToCart] = useState<number | null>(null);
 
   useEffect(() => {
     setProducts(products);
@@ -41,45 +45,59 @@ const AllProducts = ({products}: {products: productsInterface[]}) => {
       router.push("/login");
       return;
     }
+
+    // Set loading state for this specific product
+    setAddingToCart(product.id);
   
-    // Check if the product already exists in the user's cart
-    const { data: existingItem, error: fetchError } = await supabase
-      .from("cart")
-      .select("id")
-      .eq("user_id", user.id)
-      .eq("product_id", product.id)
-      .maybeSingle(); // Ensure we get a single row
-  
-    if (fetchError) {
-      console.error("Error checking cart:", fetchError.message);
-      return;
-    }
-  
-    if (existingItem) {
-      alert("This product is already in your cart.");
-      return;
-    }
-  
-    // If the product is not in the cart, insert it
-    const { error: insertError } = await supabase
-      .from("cart")
-      .insert([
-        {
-          user_id: user.id,
-          product_id: product.id,
-          product_category: product.category,
-          product_price: product.price,
-          product_designer: product.designer,
-          product_information: product.information,
-          product_pix: product.pix,
-          quantity: 1,
-        },
-      ]);
-  
-    if (insertError) {
-      console.error("Error adding to cart:", insertError.message);
-    } else {
-      alert("Product added to cart successfully!");
+    try {
+      // Check if the product already exists in the user's cart
+      const { data: existingItem, error: fetchError } = await supabase
+        .from("cart")
+        .select("id")
+        .eq("user_id", user.id)
+        .eq("product_id", product.id)
+        .maybeSingle(); // Ensure we get a single row
+    
+      if (fetchError) {
+        console.error("Error checking cart:", fetchError.message);
+        addToast("Error checking cart", "error");
+        setAddingToCart(null);
+        return;
+      }
+    
+      if (existingItem) {
+        addToast("This product is already in your cart", "warning");
+        setAddingToCart(null);
+        return;
+      }
+    
+      // If the product is not in the cart, insert it
+      const { error: insertError } = await supabase
+        .from("cart")
+        .insert([
+          {
+            user_id: user.id,
+            product_id: product.id,
+            product_category: product.category,
+            product_price: product.price,
+            product_designer: product.designer,
+            product_information: product.information,
+            product_pix: product.pix,
+            quantity: 1,
+          },
+        ]);
+    
+      if (insertError) {
+        console.error("Error adding to cart:", insertError.message);
+        addToast("Failed to add to cart", "error");
+      } else {
+        addToast("Product added to cart!", "success");
+        // Notify header to update cart count
+        cartEvents.emit();
+      }
+    } finally {
+      // Clear loading state
+      setAddingToCart(null);
     }
   };
   
@@ -125,14 +143,23 @@ const AllProducts = ({products}: {products: productsInterface[]}) => {
                         
     
                         <div>
-                        {/* <button
-                          className='bg-pry text-gray-100 mb-4   px-6 py-2 rounded-lg text-sm hover:opacity-75'
-                          onClick={() => handleAddToCart({ ...data, count: 1 , total: parseInt(data.price)})}
-                        >ADD TO CART</button> */}
                         <button
-                          className='bg-pry text-gray-100 mb-4   px-6 py-2 rounded-lg text-sm hover:opacity-75'
+                          className='bg-pry text-gray-100 mb-4 px-6 py-2 rounded-lg text-sm hover:opacity-75 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2'
                           onClick={() => handleAddToCart(data)}
-                        >ADD TO CART</button>
+                          disabled={addingToCart === data.id}
+                        >
+                          {addingToCart === data.id ? (
+                            <>
+                              <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                              </svg>
+                              Adding...
+                            </>
+                          ) : (
+                            'ADD TO CART'
+                          )}
+                        </button>
                         </div>
                       </div>
                     
