@@ -22,6 +22,7 @@ const Header = () => {
   const [activeNav, setActiveNav] = useState("one")
   const [mobileNav, setMobileNav] = useState(false)
   const { user, logout } = useAuthStore();
+  const [isMounted, setIsMounted] = useState(false);
 
 
 
@@ -55,6 +56,11 @@ const Header = () => {
   const handleMenu = () => {
     setMobileNav(!mobileNav)
   }
+
+  // Prevent hydration mismatch by only rendering dynamic content after mount
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // Note: User state is managed by authStore, no need to fetch here
 
@@ -179,7 +185,13 @@ const Header = () => {
 
           <div >
             {
-            !user ? (
+            !isMounted ? (
+              // Show placeholder during SSR to prevent hydration mismatch
+              <div className='hidden md:flex items-center space-x-4 text-blac'>
+                <div className='border border-[#D0D0D0] px-4 py-2 rounded-lg opacity-0'>Login</div>
+                <div className='border border-pry px-4 py-2 rounded-lg text-pry opacity-0'>Sign Up</div>
+              </div>
+            ) : !user ? (
               <div className='hidden md:flex items-center space-x-4 text-blac'>
               <Link href="../login" className='border border-[#D0D0D0] px-4 py-2 rounded-lg'>Login</Link>
               <Link href="../signup" className='border border-pry px-4 py-2 rounded-lg text-pry'>Sign Up</Link>
@@ -194,7 +206,7 @@ const Header = () => {
               <Link href="../cart" className="relative">
                 <RiShoppingCartLine className="h-7 w-7 " />
                 {
-                itemNumber > 0 && (
+                isMounted && itemNumber > 0 && (
                   <span className="absolute -top-1 -right-1 bg-pry text-white text-xs font-bold w-4 h-4 flex items-center justify-center rounded-full">
                     {itemNumber}
                   </span>
@@ -258,7 +270,7 @@ const Header = () => {
             <Link href="../cart" className="md:hidden relative">
               <RiShoppingCartLine className="h-7 w-7 " />
               {
-                itemNumber > 0 && user && (
+                isMounted && itemNumber > 0 && user && (
                   <span className="absolute -top-1 -right-1 bg-pry text-white text-xs font-bold w-4 h-4 flex items-center justify-center rounded-full">
                     {itemNumber}
                   </span>
@@ -292,7 +304,13 @@ const Header = () => {
               )}
 
               <div>
-                {!user ? (
+                {!isMounted ? (
+                  // Placeholder for SSR
+                  <div className='pt-4 grid gap-4 mx-4'>
+                    <div className='border border-[#D0D0D0] px-4 py-2 rounded-lg text-center opacity-0'>Login</div>
+                    <div className='border bg-pry px-4 py-2 rounded-lg text-white text-center opacity-0'>Sign Up</div>
+                  </div>
+                ) : !user ? (
                   <div className='pt-4 grid gap-4 mx-4'>
                   <Link 
                   href="../login" 

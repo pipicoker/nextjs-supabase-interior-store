@@ -21,18 +21,20 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 }));
 
-// Check session on initial load
-supabase.auth.getSession().then(({ data }) => {
-  useAuthStore.setState({ 
-    user: data.session?.user || null,
-    loading: false // Set loading to false after check
+// Check session on initial load (only in browser)
+if (typeof window !== 'undefined') {
+  supabase.auth.getSession().then(({ data }) => {
+    useAuthStore.setState({ 
+      user: data.session?.user || null,
+      loading: false // Set loading to false after check
+    });
   });
-});
 
-// Listen for auth state changes
-supabase.auth.onAuthStateChange((_event, session) => {
-  useAuthStore.setState({ 
-    user: session?.user || null,
-    loading: false 
+  // Listen for auth state changes
+  supabase.auth.onAuthStateChange((_event, session) => {
+    useAuthStore.setState({ 
+      user: session?.user || null,
+      loading: false 
+    });
   });
-});
+}

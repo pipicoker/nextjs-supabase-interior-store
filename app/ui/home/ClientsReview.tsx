@@ -42,7 +42,7 @@ const ClientsReview = ({review}: {review: ReviewInterface[]}) => {
   }, [swiperInstance])
 
   return (
-    <motion.div className='mt-32 px-[60px] font-semibold bg-gradient-to-b from-[#F5F5F5] via-orange-50/20 to-[#F5F5F5] py-20'
+    <motion.div className='mt-32 px-4 md:px-8 lg:px-[60px] font-semibold bg-gradient-to-b from-[#F5F5F5] via-orange-50/20 to-[#F5F5F5] py-20'
     initial={{ opacity: 0, y: 50 }} 
     whileInView={{ opacity: 1, y: 0 }}  
     transition={{ duration: 0.5,  delay: 0}}  viewport={{ once: true }}
@@ -117,11 +117,11 @@ const ClientsReview = ({review}: {review: ReviewInterface[]}) => {
             {
             review.map((data) => (
               <SwiperSlide key={data.id}>
-                <div className='mt-16 max-w-6xl mx-auto px-4'>
-                  <div className='grid lg:grid-cols-5 gap-8 lg:gap-12 items-center'>
+                <div className='mt-8 md:mt-16 max-w-6xl mx-auto px-2 md:px-4'>
+                  <div className='grid lg:grid-cols-5 gap-6 md:gap-8 lg:gap-12 items-center'>
                     {/* Orange Card - Made Wider */}
                     <div className='lg:col-span-2 flex justify-center lg:justify-start'>
-                      <div className='w-[320px] md:w-[380px] h-[480px] md:h-[520px] bg-gradient-to-br from-pry via-orange-500 to-orange-600 flex items-center justify-center rounded-[32px] shadow-2xl relative overflow-visible transform hover:scale-105 transition-transform duration-500 p-6'>
+                      <div className='w-full max-w-[320px] md:max-w-[380px] h-[400px] md:h-[520px] bg-gradient-to-br from-pry via-orange-500 to-orange-600 flex items-center justify-center rounded-[32px] shadow-2xl relative overflow-visible transform hover:scale-105 transition-transform duration-500 p-4 md:p-6'>
                         {/* Decorative gradient overlays */}
                         <div className='absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-white/10 rounded-[32px]'></div>
                         <div className='absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.15),transparent)] rounded-[32px]'></div>
@@ -132,7 +132,7 @@ const ClientsReview = ({review}: {review: ReviewInterface[]}) => {
                         
                         {/* Image container with enhanced styling */}
                         <div className='relative w-full h-full flex items-center justify-center'>
-                          <div className='relative w-[280px] h-[380px] md:w-[320px] md:h-[420px] rounded-[20px] overflow-hidden shadow-2xl border-4 border-white/20 group-hover:border-white/40 transition-all duration-500'>
+                          <div className='relative w-full max-w-[280px] h-[320px] md:max-w-[320px] md:h-[420px] rounded-[20px] overflow-hidden shadow-2xl border-4 border-white/20 group-hover:border-white/40 transition-all duration-500'>
                             <Image 
                               src={data.image} 
                               className="w-full h-full object-cover object-center hover:scale-105 transition-transform duration-700" 
@@ -149,13 +149,13 @@ const ClientsReview = ({review}: {review: ReviewInterface[]}) => {
               
                     {/* Review Card */}
                     <div className='lg:col-span-3 flex flex-col justify-center'>
-                      <div className='bg-white p-8 md:p-12 rounded-3xl shadow-xl border border-gray-100 hover:shadow-2xl transition-shadow duration-300'>
+                      <div className='bg-white p-6 md:p-8 lg:p-12 rounded-3xl shadow-xl border border-gray-100 hover:shadow-2xl transition-shadow duration-300'>
                         <div className='flex items-start'>
-                          <Image src={up} className="w-10 h-10 md:w-14 md:h-14 opacity-40" alt="Quote start" />
+                          <Image src={up} className="w-8 h-8 md:w-10 md:h-10 lg:w-14 lg:h-14 opacity-40" alt="Quote start" />
                         </div>
-                        <p className='mt-6 mb-8 text-left text-lg md:text-xl text-gray-700 font-normal leading-relaxed'>&quot;{data.review}&quot;</p>
+                        <p className='mt-4 md:mt-6 mb-6 md:mb-8 text-left text-base md:text-lg lg:text-xl text-gray-700 font-normal leading-relaxed break-words'>&quot;{data.review}&quot;</p>
                         <div className='flex justify-end'>
-                          <Image src={down} alt="Quote end" className='w-10 h-10 md:w-14 md:h-14 opacity-40' />
+                          <Image src={down} alt="Quote end" className='w-8 h-8 md:w-10 md:h-10 lg:w-14 lg:h-14 opacity-40' />
                         </div>
                         <div className='mt-6 pt-6 border-t border-gray-200'>
                           <div className='flex items-center gap-2'>

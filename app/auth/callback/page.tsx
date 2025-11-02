@@ -5,6 +5,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "../../lib/supabaseClient";
 import { useToastStore } from "../../store/toastStore";
 
+// Force dynamic rendering for this OAuth callback page
+export const dynamic = 'force-dynamic';
+
 function AuthCallbackContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
