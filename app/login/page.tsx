@@ -51,17 +51,24 @@ const LoginPage = () => {
         provider: "google",
         options: {
           redirectTo: `${window.location.origin}/auth/callback`,
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          },
+          skipBrowserRedirect: false,
         }
       });
     
       if (error) {
         console.error("Google Sign-In Error:", error.message);
         setError(error.message);
+        addToast(error.message, "error");
         setLoading(false);
       }
       // Don't set loading to false or redirect here - OAuth will redirect to Google
     } catch {
       setError("Failed to initiate Google sign-in");
+      addToast("Failed to initiate Google sign-in", "error");
       setLoading(false);
     }
   };

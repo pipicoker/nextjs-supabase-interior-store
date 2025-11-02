@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import Link from 'next/link';
 import { supabase } from '../lib/supabaseClient';
 
@@ -11,6 +11,7 @@ import { cartEvents } from '../lib/cartEvents';
 import { AiOutlineDelete, AiOutlineShopping } from 'react-icons/ai';
 import { FaLongArrowAltRight, FaShoppingBag, FaMinus, FaPlus } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'motion/react';
+import Image from 'next/image';
 
 const UserCart = () => {
   const [cartItems, setCartItems] = useState<any[]>([])
@@ -21,7 +22,7 @@ const UserCart = () => {
 
 
   // fetch cart items from supabase
-  const fetchUserCart = async () => {
+  const fetchUserCart = useCallback(async () => {
     if(!user){
       return []
     }
@@ -38,12 +39,11 @@ const UserCart = () => {
     }
       setCartItems(cart || [])
      
-  }
+  }, [user])
 
   useEffect(() => {
     fetchUserCart();
-
-  }, []);
+  }, [fetchUserCart]);
 
   // delete a particular product from cart
   const deleteProductFromCart = async(product_id: number) => {
@@ -177,7 +177,7 @@ const UserCart = () => {
             </div>
             <div className='text-center space-y-2'>
               <h2 className='text-2xl font-semibold text-gray-900'>Your cart is empty</h2>
-              <p className='text-gray-600'>Looks like you haven't added any items yet</p>
+              <p className='text-gray-600'>Looks like you haven&rsquo;t added any items yet</p>
             </div>
             <Link href="/products" className='group'>
               <button className='flex items-center gap-2 bg-pry text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-orange-600 transition-all transform hover:scale-105 shadow-lg'>
@@ -207,11 +207,12 @@ const UserCart = () => {
                         
                         {/* Product Image */}
                         <div className='flex-shrink-0'>
-                          <div className='w-full md:w-32 h-32 bg-gray-100 rounded-lg overflow-hidden'>
-                            <img 
+                          <div className='w-full md:w-32 h-32 bg-gray-100 rounded-lg overflow-hidden relative'>
+                            <Image 
                               src={item.product_pix} 
                               alt={item.product_category} 
-                              className='w-full h-full object-cover group-hover:scale-110 transition-transform duration-300'
+                              fill
+                              className='object-cover group-hover:scale-110 transition-transform duration-300'
                             />
                           </div>
                         </div>

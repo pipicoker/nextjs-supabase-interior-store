@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import Image from 'next/image'
@@ -60,7 +60,7 @@ const Header = () => {
 
 
    // fetch cart items from supabase
-   const fetchUserCart = async () => {
+   const fetchUserCart = useCallback(async () => {
     if(!user){
     console.log("user not logged in");
       return []
@@ -78,13 +78,13 @@ const Header = () => {
 
       const safeCart = cart || []
       setItemNumber(safeCart.length)
-  }
+  }, [user])
 
   useEffect(() => {
     if (user) {
       fetchUserCart();
     }
-  }, [user]);
+  }, [user, fetchUserCart]);
 
   // Listen to manual cart update events
   useEffect(() => {
@@ -95,7 +95,7 @@ const Header = () => {
     });
 
     return unsubscribe;
-  }, [user]);
+  }, [user, fetchUserCart]);
 
   // Use real-time subscription to update cart count when items are added or removed
   useEffect(() => {
@@ -146,7 +146,7 @@ const Header = () => {
       console.log("Cleaning up cart subscription");
       supabase.removeChannel(channel);
     };
-  }, [user?.id]);
+  }, [user, fetchUserCart]);
   
 
   return (

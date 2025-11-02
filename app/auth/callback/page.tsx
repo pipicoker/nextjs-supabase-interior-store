@@ -21,32 +21,20 @@ function AuthCallbackContent() {
         if (errorParam) {
           console.error("OAuth Error:", errorDescription || errorParam);
           setError(errorDescription || errorParam);
+          addToast(errorDescription || errorParam, "error");
           // Redirect to login after 3 seconds
           setTimeout(() => router.push("/login"), 3000);
           return;
         }
 
-        // Get the code from URL if present (PKCE flow)
-        const code = searchParams.get('code');
-        
-        if (code) {
-          // Exchange code for session
-          const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
-          
-          if (exchangeError) {
-            console.error("Session exchange error:", exchangeError.message);
-            setError(exchangeError.message);
-            setTimeout(() => router.push("/login"), 3000);
-            return;
-          }
-        }
-
-        // Verify we have a valid session
+        // For @supabase/ssr, the PKCE flow is handled automatically
+        // Just verify the session was created
         const { data: { session }, error: sessionError } = await supabase.auth.getSession();
         
         if (sessionError) {
           console.error("Session error:", sessionError.message);
           setError(sessionError.message);
+          addToast(sessionError.message, "error");
           setTimeout(() => router.push("/login"), 3000);
           return;
         }
@@ -56,7 +44,22 @@ function AuthCallbackContent() {
           addToast("Welcome! You're now logged in", "success");
           router.push("/products");
         } else {
-          // No session found
+          // No session found - try to handle hash fragment auth (fallback)
+          const hashParams = new URLSearchParams(window.location.hash.substring(1));
+          const accessToken = hashParams.get('access_token');
+          
+          if (accessToken) {
+            // Session should be set automatically, give it a moment
+            await new Promise(resolve => setTimeout(resolve, 500));
+            const { data: { session: retrySession } } = await supabase.auth.getSession();
+            
+            if (retrySession) {
+              addToast("Welcome! You're now logged in", "success");
+              router.push("/products");
+              return;
+            }
+          }
+          
           setError("No session found. Please try logging in again.");
           addToast("No session found. Please try logging in again.", "error");
           setTimeout(() => router.push("/login"), 3000);
@@ -64,11 +67,13 @@ function AuthCallbackContent() {
       } catch (err) {
         console.error("Unexpected error during OAuth callback:", err);
         setError("An unexpected error occurred. Please try again.");
+        addToast("An unexpected error occurred. Please try again.", "error");
         setTimeout(() => router.push("/login"), 3000);
       }
     };
 
     handleOAuthCallback();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router, searchParams]);
 
   return (

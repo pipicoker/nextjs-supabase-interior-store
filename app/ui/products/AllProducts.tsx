@@ -36,9 +36,7 @@ const AllProducts = ({products}: {products: productsInterface[]}) => {
 
   useEffect(() => {
     setProducts(products);
-    
-
-  }, [products]);
+  }, [products, setProducts]);
 
   // add items to cart
   const handleAddToCart = async (product: productsInterface) => {
