@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react';
 import Image from 'next/image';
 import { motion } from "motion/react";
 import Line from '../../../public/Images/Line.png'
@@ -13,7 +14,7 @@ interface Benefit {
   
 }
 
-const iconMap: { [key: string]: JSX.Element } = {
+const iconMap: { [key: string]: React.ReactElement } = {
   'Convenience': <FaHandHoldingHeart className="w-12 h-12" />,
   'Price comparison': <FaDollarSign className="w-12 h-12" />,
   'Swift Delivery': <FaShippingFast className="w-12 h-12" />,
